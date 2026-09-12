@@ -1,0 +1,121 @@
+{
+  "_verify_before_use": "IMPORTANT: dates, job titles and the PG Diploma institution name below were inconsistent across your existing resume versions and LinkedIn. Confirm every date, title, and institution name against your actual contracts/transcripts before this file is used to generate applications. See fields marked VERIFY.",
+
+  "personal": {
+    "name": "Vivek Bharadwaj Aryasomayajula",
+    "location": "Sydney, NSW, Australia",
+    "phone": "0425 177 033",
+    "email": "vivek.aryasomayajula@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/vivek-energyanalytics",
+    "portfolio": "https://vivekarya05.github.io/Vivek_Profile/",
+    "work_rights": "Temporary Graduate (Subclass 485) visa - unrestricted full-time Australian work rights until August 2029. No sponsorship required."
+  },
+
+  "target_titles": ["Business Analyst", "Data Analyst", "Business Systems Analyst", "Energy Market Analyst"],
+  "target_locations": ["Sydney NSW", "Greater Sydney", "New South Wales"],
+  "min_match_score_to_tailor": 40,
+
+  "core_skills": [
+    "SQL", "Python", "Power BI", "PostgreSQL", "Business Analysis",
+    "Requirements Gathering", "Stakeholder Management", "CRM", "ERP Implementation",
+    "Data Analysis", "Data Visualization", "Process Improvement",
+    "Energy Market Analytics (AEMO/NEM)", "PLEXOS Fundamentals", "JavaScript",
+    "DAX", "Tableau", "UAT", "Agile", "BRD", "FRD"
+  ],
+
+  "summary": "Business Analyst and Data Analyst with 6+ years across enterprise systems, CRM/ERP delivery, and energy-sector analytics, with hands-on experience in Australian energy market data (AEMO/NEM) through research and project work.",
+
+  "experience": [
+    {
+      "title": "Research Assistant",
+      "company": "Transforming Energy Markets (TEM) Research Centre, Macquarie University",
+      "location": "Sydney, NSW",
+      "start_date": "2026-03 (VERIFY exact month)",
+      "end_date": "Present",
+      "employment_type": "Part-time / casual, concurrent with full-time Master's study",
+      "bullets": [
+        "Analyse and maintain large-scale AEMO electricity market datasets using Python and SQL for data cleaning, processing, and integration.",
+        "Develop and maintain interactive Power BI dashboards supporting market research, forecasting, and policy analysis.",
+        "Handle custom data extraction and formatting requests for research and industry-facing stakeholders.",
+        "Maintain data governance practices including access controls and audit trails."
+      ],
+      "keywords": ["Python", "SQL", "Power BI", "AEMO", "NEM", "data governance", "data pipelines"]
+    },
+    {
+      "title": "Business Analyst - Finance & Operations (VERIFY exact title against contract)",
+      "company": "Western Sydney University",
+      "location": "Sydney, NSW",
+      "start_date": "2025-03 (VERIFY)",
+      "end_date": "2026-04 (VERIFY)",
+      "employment_type": "Part-time / casual, concurrent with full-time Master's study",
+      "bullets": [
+        "Supported finance operations including invoice processing, claims management, and travel request coordination.",
+        "Led asset management activities including lifecycle tracking and data validation across systems.",
+        "Designed an Asset Governance Plan defining ownership, data standards, and approval workflows.",
+        "Developed Power BI reporting for financial and operational performance metrics."
+      ],
+      "keywords": ["Business Analysis", "Power BI", "stakeholder management", "process improvement", "asset management"]
+    },
+    {
+      "title": "ICT Business Analyst - CRM/ERP Solutions",
+      "company": "CentraHub Pvt Ltd",
+      "location": "Hyderabad, India",
+      "start_date": "2022-11",
+      "end_date": "2024-06",
+      "employment_type": "Full-time",
+      "bullets": [
+        "Delivered and supported 12+ client-facing SaaS CRM/ERP implementations across Canada, the US, the Middle East, and India.",
+        "Facilitated stakeholder workshops, requirements elicitation, and current-state/future-state process analysis.",
+        "Produced BRDs, FRDs, functional specifications, and user stories, maintaining requirements traceability in Jira and Confluence.",
+        "Automated operational workflows using SQL and JavaScript, reducing field response times by approximately 35%.",
+        "Developed KPI dashboards and MIS reporting to support operational decision-making."
+      ],
+      "keywords": ["CRM", "ERP", "SQL", "JavaScript", "requirements gathering", "BRD", "FRD", "UAT", "stakeholder management"]
+    },
+    {
+      "title": "Senior Project Engineer - Energy Systems",
+      "company": "Indian Immunologicals Pvt Ltd",
+      "location": "Hyderabad, India",
+      "start_date": "2020-09",
+      "end_date": "2022-11",
+      "employment_type": "Full-time",
+      "bullets": [
+        "Optimised energy-intensive utility systems (HVAC, chillers) to improve efficiency and reduce costs.",
+        "Led SCADA/PLC system validation ensuring compliance with regulatory standards (21 CFR Part 11).",
+        "Spearheaded digital transformation initiatives for utility data reporting and energy audits."
+      ],
+      "keywords": ["SCADA", "PLC", "energy efficiency", "utilities", "compliance"]
+    }
+  ],
+
+  "education": [
+    {"degree": "Master of Business Analytics", "institution": "Macquarie University, Sydney", "date": "VERIFY - May or June 2026"},
+    {"degree": "PG Diploma, Project Management", "institution": "VERIFY EXACT NAME - resumes and LinkedIn disagree (Symbiosis International University vs Symbiosis College of Distance Learning)", "date": "VERIFY - resumes and LinkedIn give different date ranges"},
+    {"degree": "Bachelor of Technology, Power Engineering", "institution": "GMR Institute of Technology, India", "date": "2015-2019"}
+  ],
+
+  "certifications": [
+    "PLEXOS Fundamentals - Energy Exemplar",
+    "NEM Foundations - Australian Energy Market Operator",
+    "Excel Skills for Business: Essentials",
+    "ISO 50001:2018 Energy Management Systems"
+  ],
+
+  "projects": [
+    {
+      "name": "AEMO NEMWeb ETL Pipeline & Market Data Architecture",
+      "description": "Built automated ETL pipelines to extract, clean, validate, and structure AEMO NEMWeb datasets, loading into PostgreSQL for downstream analytics.",
+      "keywords": ["ETL", "Python", "SQL", "PostgreSQL", "AEMO"]
+    },
+    {
+      "name": "BESS Market Modelling & Revenue Analytics",
+      "description": "Modelled battery charge-discharge strategies using 5-minute wholesale price signals to assess arbitrage and revenue potential.",
+      "keywords": ["Python", "BESS", "NEM", "forecasting"]
+    },
+    {
+      "name": "Electricity Demand & Price Forecasting",
+      "description": "Developed short-term demand and price forecasting models using ARIMA, XGBoost, and LSTM on AEMO datasets.",
+      "keywords": ["ARIMA", "XGBoost", "LSTM", "forecasting", "Python"]
+    }
+  ]
+}
