@@ -1,4 +1,0 @@
-requests
-python-docx
-anthropic
-python-dotenv

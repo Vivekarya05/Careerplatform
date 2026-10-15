@@ -1,92 +1,96 @@
-# Career platform
+# Career Intelligence Platform
 
-Finds jobs matching your skills, scores the match, and generates a tailored,
-ATS-friendly resume + cover letter for each one — automatically, once a day,
-hosted entirely on GitHub for free (aside from the small Anthropic API cost).
+Private AI-powered career operating system for Vivek Bharadwaj Aryasomayajula's
+Business-Analyst-in-Energy job search in Australia — combining career coach,
+job intelligence engine, resume writer, recruiter strategist, skill-gap
+tracker, and interview mentor in one platform.
+
+Positioning: **Business Analyst IN Energy**, not Business Analyst OR Energy.
+
+## Architecture
+
+- **Frontend**: Next.js + TypeScript, mobile-friendly dashboard (`frontend/`)
+- **Backend**: Python FastAPI with agent services (`backend/`)
+- **Database**: Supabase PostgreSQL with RLS (`database/`)
+- **Auth**: Supabase Auth magic-link sign-in
+- **Storage**: Supabase Storage for generated resumes
+- **AI**: OpenAI API with structured JSON outputs
+- **Resume PDFs**: LaTeX (`resume/`) compiled with `latexmk`
+- **Scheduler**: GitHub Actions cron, twice-daily job discovery + digest
+- **Email digest**: Resend API
+- **Your source-of-truth profile**: [`data/master_profile.json`](data/master_profile.json)
+
+See [`docs/complete-setup.md`](docs/complete-setup.md), [`docs/deployment.md`](docs/deployment.md)
+and [`docs/security.md`](docs/security.md) for full setup, deployment, and
+security details, and [`AGENTS.md`](AGENTS.md) for what each agent does and
+the safety rules they operate under.
+
+## Repo structure
+
+```text
+backend/              FastAPI API, services, agents, CLI
+frontend/             Next.js + TypeScript dashboard
+agents/               Cross-agent specs and prompts
+resume/               LaTeX resume template
+database/             Supabase schema and seed files
+data/                 Your master profile (source of truth for resume content)
+.github/workflows/    Scheduled job discovery + digest
+tests/                Unit tests
+docs/                 Deployment and security docs
+```
 
 ## Before you do anything else
 
-Open `data/master_profile.json` and fix every field marked `VERIFY`. Two of
-your existing resume versions and your LinkedIn profile disagreed on the
-Western Sydney University job title and on your PG Diploma's institution
-name and dates — get the correct wording from your actual contracts and
-transcripts before this file starts generating applications for you.
+Open [`data/master_profile.json`](data/master_profile.json) and fix every
+field marked `VERIFY` — your existing resume versions and LinkedIn disagree
+on a couple of dates and institution names.
 
-## How it works
+## Run it locally
 
-1. **GitHub Actions** runs `scripts/main.py` once a day on a free scheduled
-   runner — no server to maintain.
-2. **`fetch_jobs.py`** pulls listings from the Adzuna and Jooble APIs for
-   your target titles/locations. (Note: SEEK and LinkedIn don't offer public
-   search APIs, and scraping them would breach their terms of service, so
-   they're intentionally not included here.)
-3. **`match_engine.py`** scores each new job against your skills and lists
-   what matches and what's missing.
-4. **`tailor_documents.py`** calls the Anthropic API for jobs above your
-   match threshold, and writes a tailored resume + cover letter as `.docx`.
-5. **`docs/`** is a static dashboard (served by GitHub Pages) that reads the
-   results and lets you browse, compare, and download.
+### Backend
 
-## Setup
-
-### 1. Create the repo
-Create a new **public** GitHub repo (public repos get unlimited free Actions
-minutes and free Pages hosting) and push everything in this folder to it.
-
-### 2. Get your API keys (all have free tiers except Anthropic)
-- Adzuna: https://developer.adzuna.com/ (free, instant signup)
-- Jooble: https://jooble.org/api/about (free, instant signup)
-- Anthropic: https://console.anthropic.com/ (pay-as-you-go — tailoring one
-  job with the default model costs a fraction of a cent to a few cents)
-
-### 3. Add the keys as repo secrets
-Repo → **Settings → Secrets and variables → Actions → New repository
-secret**. Add all four:
-- `ADZUNA_APP_ID`
-- `ADZUNA_APP_KEY`
-- `JOOBLE_API_KEY`
-- `ANTHROPIC_API_KEY`
-
-### 4. Enable GitHub Pages
-Repo → **Settings → Pages** → Source: "Deploy from a branch" → Branch:
-`main` → Folder: `/docs` → Save. Your dashboard will be live at
-`https://<your-username>.github.io/<repo-name>/`.
-
-### 5. Test it locally first (recommended)
 ```bash
-pip install -r requirements.txt
-cp .env.example .env   # fill in your real keys
-export $(cat .env | xargs)
-cd scripts
-python main.py
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[test]"
+cp .env.example .env
+uvicorn app.main:app --reload
 ```
-Check `docs/data/jobs.json` and `docs/downloads/` before trusting the daily
-automation with it.
 
-### 6. Let it run
-The workflow runs automatically every day (`.github/workflows/daily-job-search.yml`).
-You can also trigger it manually any time: repo → **Actions** →
-"Daily job search" → **Run workflow**.
+With `APP_ENV=development` and no `SUPABASE_JWT_SECRET` set, the backend
+runs against an in-memory job store — no Supabase project required to try it
+out locally.
 
-## Tuning it to you
+### Frontend
 
-- `target_titles` / `target_locations` in `data/master_profile.json` —
-  widen or narrow your search.
-- `min_match_score_to_tailor` — raise this if you're getting too many
-  low-relevance tailored documents; lower it to see more borderline matches
-  (untailored) on the dashboard.
-- `scripts/tailor_documents.py` — the `MODEL` constant defaults to Claude
-  Haiku 4.5 for cost efficiency running daily at scale. Swap to
-  `claude-sonnet-5` if you want higher-quality tailoring and don't mind the
-  extra cost per job.
+```bash
+cd frontend
+cp .env.example .env.local
+# set NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+# set NEXT_PUBLIC_REQUIRE_AUTH=false for local testing without Supabase Auth
+npm install
+npm run dev
+```
 
-## Honest limitations (v1)
+Visit `http://localhost:3000`.
 
-- Skill matching is keyword-based, not semantic — it won't catch a JD that
-  says "reporting tools" instead of "Power BI." Good enough to triage; a
-  natural upgrade later is embedding-based matching.
-- Adzuna/Jooble field names in `fetch_jobs.py` are based on their published
-  docs — verify against the live API response the first time you run it, as
-  public APIs occasionally change shape.
-- No email/notification step yet — you check the dashboard. Easy to add
-  later (e.g. a GitHub Actions step that emails a daily digest).
+## Going live
+
+1. Create a Supabase project, run `database/schema.sql` then `database/seed.sql`.
+2. Get free-tier API keys: [Adzuna](https://developer.adzuna.com/), and a
+   pay-as-you-go [OpenAI](https://platform.openai.com/) key.
+3. Deploy the backend to Render (`render.yaml` is already set up) and the
+   frontend to Vercel, wiring in the environment variables listed in
+   [`docs/deployment.md`](docs/deployment.md).
+4. Add the same secrets as GitHub Actions secrets so the scheduled job
+   discovery + digest workflow (`.github/workflows/career-intelligence.yml`)
+   can run twice daily.
+
+## Safety rules
+
+- No hardcoded credentials.
+- No LinkedIn scraping — manual LinkedIn links/descriptions only.
+- No fabricated experience, employers, or metrics.
+- Recruiter/outreach messages are drafts only — never auto-sent.
+- Keep the repository private in production.

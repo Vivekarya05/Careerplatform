@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: jobsearch-ai-backend
+    env: docker
+    rootDir: .
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: https://jobsearch-ai-beta.vercel.app
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini

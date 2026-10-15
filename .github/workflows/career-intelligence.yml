@@ -1,0 +1,63 @@
+name: Career Intelligence Scheduler
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "Digest period for manual runs"
+        required: false
+        default: "morning"
+        type: choice
+        options:
+          - morning
+          - evening
+          - test
+
+jobs:
+  career-intelligence:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    env:
+      APP_ENV: production
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      CAREER_USER_ID: ${{ secrets.CAREER_USER_ID }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+      EMAIL_TO: ${{ secrets.EMAIL_TO }}
+      GMAIL_IMAP_USER: ${{ secrets.GMAIL_IMAP_USER }}
+      GMAIL_IMAP_APP_PASSWORD: ${{ secrets.GMAIL_IMAP_APP_PASSWORD }}
+      ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+      ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install backend
+        run: pip install -e backend
+
+      - name: Check Sydney schedule
+        id: schedule
+        run: python scripts/sydney_schedule_gate.py
+
+      - name: Discover and score jobs
+        if: ${{ github.event_name == 'workflow_dispatch' || steps.schedule.outputs.should_run == 'true' }}
+        run: python -m app.cli discover
+        working-directory: backend
+
+      - name: Send digest
+        if: ${{ github.event_name == 'workflow_dispatch' || steps.schedule.outputs.should_run == 'true' }}
+        run: python -m app.cli digest --period "${{ github.event.inputs.period || steps.schedule.outputs.period }}"
+        working-directory: backend
